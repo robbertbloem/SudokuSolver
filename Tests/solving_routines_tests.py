@@ -25,9 +25,9 @@ def make_range_helper(t):
     if type(t) == tuple:
         res = numpy.arange(t[0], t[1], dtype = int)
     elif type(t) == list:
-        res = t
+        res = numpy.array(t)
     else:
-        res = t
+        res = numpy.array([t])
     return res
 
 
@@ -48,24 +48,39 @@ class Test_singles(unittest.TestCase):
     def setUp(self):
         self.verbose = 1
 
+
     def do_tests(self, s, test_filled, test_no_pencil, tests_pencils):
         for test in test_filled:
             r,c,n = make_range(test)
-            self.assertTrue(numpy.all(s[r,c,0] == n))
+#             self.assertTrue(numpy.all(s[r,c,0] == n))
+            for _r in r:
+                for _c in c:
+                    for _n in n:
+                        self.assertTrue(numpy.all(s[_r,_c,0] == _n))  
+
 
         for test in test_no_pencil:
             r,c,n = make_range(test)
-            self.assertTrue(numpy.all(s[r,c,n] == 0))
+#             print(r,c,n)
+#             self.assertTrue(numpy.all(s[r,c,n] == 0))
+            for _r in r:
+                for _c in c:
+                    for _n in n:
+                        self.assertTrue(numpy.all(s[_r,_c,_n] == 0))  
 
         for test in tests_pencils:
             r,c,n = make_range(test)
-            for _c in c:
-                for _n in n:
-                    self.assertTrue(numpy.all(s[r,_c,_n] == _n))  
+            for _r in r:
+                for _c in c:
+                    for _n in n:
+                        self.assertTrue(numpy.all(s[_r,_c,_n] == _n))  
      
 
     def test_check_last_digit(self):
         """
+        Fill in last digit in a house.
+        Number 1 in r=0, c=0.
+        Check no pencil marks present in row and column.
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         s[0,0,2:10] = 0
@@ -111,6 +126,9 @@ class Test_singles(unittest.TestCase):
 
     def test_full_house_row_col(self):
         """
+        Last possible location for a digit.
+        Fill in [0,0,1] and [0,4,2].
+        Check if pencil marks are removed from rows and cols.
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
 
@@ -144,6 +162,8 @@ class Test_singles(unittest.TestCase):
 
     def test_full_house_block(self):
         """
+        Last possible location for digit in a block
+        
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
 
@@ -176,21 +196,31 @@ class Test_check_naked_subsets(unittest.TestCase):
         self.verbose = 1
 
 
-
     def do_tests(self, s, test_filled, test_no_pencil, tests_pencils):
         for test in test_filled:
             r,c,n = make_range(test)
-            self.assertTrue(numpy.all(s[r,c,0] == n))
+#             self.assertTrue(numpy.all(s[r,c,0] == n))
+            for _r in r:
+                for _c in c:
+                    for _n in n:
+                        self.assertTrue(numpy.all(s[_r,_c,0] == _n))  
+
 
         for test in test_no_pencil:
             r,c,n = make_range(test)
-            self.assertTrue(numpy.all(s[r,c,n] == 0))
+#             print(r,c,n)
+#             self.assertTrue(numpy.all(s[r,c,n] == 0))
+            for _r in r:
+                for _c in c:
+                    for _n in n:
+                        self.assertTrue(numpy.all(s[_r,_c,_n] == 0))  
 
         for test in tests_pencils:
             r,c,n = make_range(test)
-            for _c in c:
-                for _n in n:
-                    self.assertTrue(numpy.all(s[r,_c,_n] == _n))  
+            for _r in r:
+                for _c in c:
+                    for _n in n:
+                        self.assertTrue(numpy.all(s[_r,_c,_n] == _n))  
 
     def test_check_naked_pair_col(self):
         """
@@ -205,32 +235,17 @@ class Test_check_naked_subsets(unittest.TestCase):
         n = numpy.arange(7) + 1
         s  = SSR.erase_pencil(s, r, c, n, self.verbose)
         SSS.check_naked_pair(s, self.verbose)
-        SSD.display_pencil(s)
-
+#         SSD.display_pencil(s)
         test_filled = [
-#             [1,1,4, "four"],
         ]
         test_no_pencil = [
-            [[1,2,3,5,6,7,8],0,[8,9], "no 89"],
-#             [(0,9),1,4, "four col"],
-#             [(0,3),(0,3),4, "four block"],
+            [[1,2,3,5,6,7,8],0,8, "no 8"],
+            [[1,2,3,5,6,7,8],0,9, "no 9"],
         ]
         tests_pencils = [
-#             [(2,9),(3,9),(1,10), "all pencils A"],
-#             [0,(3,9),(1,10), "all pencils B"],
-#             [(3,9),[0,2],(1,10), "all pencils C"],
+            [(0,9),(1,9),(1,10), "all pencils A"],
         ]
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
-
-
-        
-
-        self.assertTrue(numpy.all(s[0,0,1:8] == 0))
-        self.assertTrue(numpy.all(s[4,0,1:8] == 0))
-        self.assertTrue(numpy.all(s[0,0,8:10] != 0))
-        self.assertTrue(numpy.all(s[4,0,8:10] != 0))
-        self.assertTrue(numpy.all(s[1:4,0,8:10] == 0))
-        self.assertTrue(numpy.all(s[1:4,0,1:8] != 0))
 
 
     def test_check_naked_pair_col_with_1_complete(self):
@@ -250,12 +265,19 @@ class Test_check_naked_subsets(unittest.TestCase):
         s  = SSR.erase_pencil(s, r, c, n, self.verbose)
         SSS.check_naked_pair(s, self.verbose)
 #         SSD.display_pencil(s)
-        self.assertTrue(numpy.all(s[1,0,1:8] == 0))
-        self.assertTrue(numpy.all(s[4,0,1:8] == 0))
-        self.assertTrue(numpy.all(s[1,0,8:10] != 0))
-        self.assertTrue(numpy.all(s[4,0,8:10] != 0))
-        self.assertTrue(numpy.all(s[2:4,0,8:10] == 0))
-        self.assertTrue(numpy.all(s[2:4,0,2:8] != 0))
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [[0,2,3,5,6,7,8],0,[8,9], "no 8 or 9"],
+            [(0,9),(0,9),1, "no 1"],
+            [[1,4],0,(1,8), "no 1-7 where 8 or 9"],
+        ]
+        tests_pencils = [
+            [[1,4],0,[8,9], "8 and 9 present"],
+            [[2,3,5,6,7,8],0,[2,3,4,5,6,7], "pencils present"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+
 
 
     def test_check_naked_pair_col_with_col_complete(self):
@@ -274,7 +296,20 @@ class Test_check_naked_subsets(unittest.TestCase):
             s, f = SSR.fill_value(s, i, 0, i+1, self.verbose)
         
         SSS.check_naked_pair(s, self.verbose)
-#         SSD.display_pencil(s)
+        SSD.display_pencil(s)
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [[1,2,3,5,6,7,8],1,[8,9], "no 8 or 9"],
+#             [0,(0,9),1, "no 1"],
+#             [[1,4],0, (1,8), "no 1"],
+        ]
+        tests_pencils = [
+            [[0,4],1,[8,9], "8 and 9 present"],
+            [(0,6),2,[8,9], "8 and 9 present in c=2"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+
         self.assertTrue(numpy.all(s[0,1,1:8] == 0))
         self.assertTrue(numpy.all(s[4,1,1:8] == 0))
         self.assertTrue(numpy.all(s[0,1,8:10] != 0))
