@@ -491,7 +491,7 @@ def __check_naked_quad_row(sudoku, r, c1, c2, c3, c4, nums, verbose = 0):
                     test_D = numpy.all(sudoku[r,c4,n_idx] == 0)
             
                     if test_A and test_B and test_C and test_D: 
-                        sudoku = SSR.erase_pencil_row(sudoku, r = r, except_c = [c1, c2, c3,c4], n = [n1+1, n2+1, n3+1,n4+1], verbose = verbose)
+                        sudoku = SSR.erase_pencil_row(sudoku, r = r, except_c = [c1, c2, c3,c4], n = [n1, n2, n3, n4], verbose = verbose)
                         
     return sudoku
 
@@ -518,7 +518,7 @@ def __check_naked_quad_block(sudoku, b, r1, r2, r3, r4, c1, c2, c3, c4, nums, ve
                     test_D = numpy.all(sudoku[r4,c4,n_idx] == 0)
                     if test_A and test_B and test_C and test_D:
                         except_rc = [[r1,c1],[r2,c2],[r3,c3],[r4,c4]]
-                        sudoku = SSR.erase_pencil_block(sudoku, br = b[0], bc = b[1], except_rc = except_rc, n = [n1+1, n2+1, n3+1, n4+1], verbose = verbose)
+                        sudoku = SSR.erase_pencil_block(sudoku, br = b[0], bc = b[1], except_rc = except_rc, n = [n1, n2, n3, n4], verbose = verbose)
 
     return sudoku
 
