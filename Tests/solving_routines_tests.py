@@ -52,28 +52,28 @@ class Test_singles(unittest.TestCase):
     def do_tests(self, s, test_filled, test_no_pencil, tests_pencils):
         for test in test_filled:
             r,c,n = make_range(test)
-#             self.assertTrue(numpy.all(s[r,c,0] == n))
             for _r in r:
                 for _c in c:
                     for _n in n:
-                        self.assertTrue(numpy.all(s[_r,_c,0] == _n))  
+                        with self.subTest(test[3]):
+                            self.assertTrue(numpy.all(s[_r,_c,0] == _n))  
 
 
         for test in test_no_pencil:
             r,c,n = make_range(test)
-#             print(r,c,n)
-#             self.assertTrue(numpy.all(s[r,c,n] == 0))
             for _r in r:
                 for _c in c:
                     for _n in n:
-                        self.assertTrue(numpy.all(s[_r,_c,_n] == 0))  
+                        with self.subTest(test[3]):
+                            self.assertTrue(numpy.all(s[_r,_c,_n] == 0))  
 
         for test in tests_pencils:
             r,c,n = make_range(test)
             for _r in r:
                 for _c in c:
                     for _n in n:
-                        self.assertTrue(numpy.all(s[_r,_c,_n] == _n))  
+                        with self.subTest(test[3]):
+                            self.assertTrue(numpy.all(s[_r,_c,_n] == _n))  
      
 
     def test_check_last_digit(self):
@@ -199,31 +199,33 @@ class Test_check_naked_subsets(unittest.TestCase):
     def do_tests(self, s, test_filled, test_no_pencil, tests_pencils):
         for test in test_filled:
             r,c,n = make_range(test)
-#             self.assertTrue(numpy.all(s[r,c,0] == n))
             for _r in r:
                 for _c in c:
                     for _n in n:
-                        self.assertTrue(numpy.all(s[_r,_c,0] == _n))  
+                        with self.subTest(test[3]):
+                            self.assertTrue(numpy.all(s[_r,_c,0] == _n))  
 
 
         for test in test_no_pencil:
             r,c,n = make_range(test)
-#             print(r,c,n)
-#             self.assertTrue(numpy.all(s[r,c,n] == 0))
             for _r in r:
                 for _c in c:
                     for _n in n:
-                        self.assertTrue(numpy.all(s[_r,_c,_n] == 0))  
+                        with self.subTest(test[3]):
+                            self.assertTrue(numpy.all(s[_r,_c,_n] == 0))  
 
         for test in tests_pencils:
             r,c,n = make_range(test)
             for _r in r:
                 for _c in c:
                     for _n in n:
-                        self.assertTrue(numpy.all(s[_r,_c,_n] == _n))  
+                        with self.subTest(test[3]):
+                            self.assertTrue(numpy.all(s[_r,_c,_n] == _n))  
 
     def test_check_naked_pair_col(self):
         """
+        Two squares can hold exactly two (the same) values. The values can be removed from the other squares in the column. 
+        Pencil marks outside the column are not affected.
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         r = 0
@@ -237,6 +239,7 @@ class Test_check_naked_subsets(unittest.TestCase):
         SSS.check_naked_pair(s, self.verbose)
 #         SSD.display_pencil(s)
         test_filled = [
+#             [0,0,1,"test test"]
         ]
         test_no_pencil = [
             [[1,2,3,5,6,7,8],0,8, "no 8"],
@@ -250,6 +253,7 @@ class Test_check_naked_subsets(unittest.TestCase):
 
     def test_check_naked_pair_col_with_1_complete(self):
         """
+        Similar to ``test_check_naked_pair_col``, but now with the number 1 already filled in. This is to test the mechanism where finished nums are not checked. 
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         
@@ -282,6 +286,8 @@ class Test_check_naked_subsets(unittest.TestCase):
 
     def test_check_naked_pair_col_with_col_complete(self):
         """
+        Similar to ``test_check_naked_pair_col``, but now with the a column already finished. This is to test the mechanism where finished cols are not checked. 
+        The finished column is 0, the column with the naked pair is 1 with values 8 and 9. 
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         r = 0
@@ -296,13 +302,11 @@ class Test_check_naked_subsets(unittest.TestCase):
             s, f = SSR.fill_value(s, i, 0, i+1, self.verbose)
         
         SSS.check_naked_pair(s, self.verbose)
-        SSD.display_pencil(s)
+#         SSD.display_pencil(s)
         test_filled = [
         ]
         test_no_pencil = [
             [[1,2,3,5,6,7,8],1,[8,9], "no 8 or 9"],
-#             [0,(0,9),1, "no 1"],
-#             [[1,4],0, (1,8), "no 1"],
         ]
         tests_pencils = [
             [[0,4],1,[8,9], "8 and 9 present"],
@@ -310,17 +314,11 @@ class Test_check_naked_subsets(unittest.TestCase):
         ]
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
 
-        self.assertTrue(numpy.all(s[0,1,1:8] == 0))
-        self.assertTrue(numpy.all(s[4,1,1:8] == 0))
-        self.assertTrue(numpy.all(s[0,1,8:10] != 0))
-        self.assertTrue(numpy.all(s[4,1,8:10] != 0))
-        self.assertTrue(numpy.all(s[1:3,1,4:8] != 0))
-        self.assertTrue(numpy.all(s[3,1,(1,2,3,7)] != 0))
-        self.assertTrue(numpy.all(s[5,1,(1,2,3,7)] != 0))
 
 
     def test_check_naked_pair_col_with_col_complete_2(self):
         """
+        Similar to above, but with naked pair in column 8 (the last column).
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         r = 0
@@ -336,17 +334,22 @@ class Test_check_naked_subsets(unittest.TestCase):
         
         SSS.check_naked_pair(s, self.verbose)
 #         SSD.display_pencil(s)
-        self.assertTrue(numpy.all(s[0,8,1:8] == 0))
-        self.assertTrue(numpy.all(s[4,8,1:8] == 0))
-        self.assertTrue(numpy.all(s[0,8,8:10] != 0))
-        self.assertTrue(numpy.all(s[4,8,8:10] != 0))
-        self.assertTrue(numpy.all(s[1:3,8,4:8] != 0))
-        self.assertTrue(numpy.all(s[3,8,(1,2,3,7)] != 0))
-        self.assertTrue(numpy.all(s[5,8,(1,2,3,7)] != 0))
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [[1,2,3,5,6,7,8],8,[8,9], "no 8 or 9"],
+        ]
+        tests_pencils = [
+            [[0,4],8,[8,9], "8 and 9 present"],
+            [(0,6),7,[8,9], "8 and 9 present in c=7"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+
 
 
     def test_check_naked_pair_col_with_col_complete_3(self):
         """
+        Similar to above, but with naked pair in column 0 (the last column).
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         r = 0
@@ -362,18 +365,22 @@ class Test_check_naked_subsets(unittest.TestCase):
         
         SSS.check_naked_pair(s, self.verbose)
 #         SSD.display_pencil(s)
-#         self.assertTrue(numpy.all(s[0,8,1:8] == 0))
-#         self.assertTrue(numpy.all(s[4,8,1:8] == 0))
-#         self.assertTrue(numpy.all(s[0,8,8:10] != 0))
-#         self.assertTrue(numpy.all(s[4,8,8:10] != 0))
-#         self.assertTrue(numpy.all(s[1:3,8,4:8] != 0))
-#         self.assertTrue(numpy.all(s[3,8,(1,2,3,7)] != 0))
-#         self.assertTrue(numpy.all(s[5,8,(1,2,3,7)] != 0))
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [[1,2,3,5,6,7,8],0,[8,9], "no 8 or 9"],
+        ]
+        tests_pencils = [
+            [[0,4],0,[8,9], "8 and 9 present"],
+            [(0,6),1,[8,9], "8 and 9 present in c=1"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
 
 
 
     def test_check_naked_pair_col_with_row_complete(self):
         """
+        As above, but now with a row complete.
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         r = 0
@@ -389,17 +396,25 @@ class Test_check_naked_subsets(unittest.TestCase):
         
         SSS.check_naked_pair(s, self.verbose)
 #         SSD.display_pencil(s)
-        self.assertTrue(numpy.all(s[0,1,1:8] == 0))
-        self.assertTrue(numpy.all(s[8,1,1:8] == 0))
-        self.assertTrue(numpy.all(s[0,1,8:10] != 0))
-        self.assertTrue(numpy.all(s[8,1,8:10] != 0))
-#         self.assertTrue(numpy.all(s[2,1,4:8] != 0))
-#         self.assertTrue(numpy.all(s[3,1,(1,3,4,5,6,7)] != 0))
-#         self.assertTrue(numpy.all(s[5,1,(1,3,4,5,6,7)] != 0))
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [[1,2,3,4,5,6,7],1,[8,9], "no 8 or 9"],
+        ]
+        tests_pencils = [
+            [[0,4],0,[8,9], "8 and 9 present"],
+            [0,(0,6),[8,9], "8 and 9 present in top column"],
+            [(2,9),0,[8,9], "8 and 9 present in c=0"],
+            [(2,9),(2,6),[8,9], "8 and 9 present in columns (but not in left three cols because last two rows contain 8 and 9"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+        
+
         
         
     def test_check_naked_pair_col_with_row_complete_2(self):
         """
+        As above, but now with a row complete.
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         r = 0
@@ -415,17 +430,24 @@ class Test_check_naked_subsets(unittest.TestCase):
         
         SSS.check_naked_pair(s, self.verbose)
 #         SSD.display_pencil(s)
-        self.assertTrue(numpy.all(s[0,1,1:8] == 0))
-        self.assertTrue(numpy.all(s[4,1,1:8] == 0))
-        self.assertTrue(numpy.all(s[0,1,8:10] != 0))
-        self.assertTrue(numpy.all(s[4,1,8:10] != 0))
-        self.assertTrue(numpy.all(s[2,1,4:8] != 0))
-        self.assertTrue(numpy.all(s[3,1,(1,3,4,5,6,7)] != 0))
-        self.assertTrue(numpy.all(s[5,1,(1,3,4,5,6,7)] != 0))
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [[1,2,3,5,6,7,8],1,[8,9], "no 8 or 9"],
+        ]
+        tests_pencils = [
+            [[0,4],0,[8,9], "8 and 9 present"],
+            [0,(0,6),[8,9], "8 and 9 present in top column"],
+            [(2,9),0,[8,9], "8 and 9 present in c=0"],
+            [(2,9),(2,6),[8,9], "8 and 9 present in columns (but not in left three cols because last two rows contain 8 and 9"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+
         
 
     def test_check_naked_pair_row(self):
         """
+        Naked pair in row 8. Other rows are not affected.
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         r = 8
@@ -438,17 +460,25 @@ class Test_check_naked_subsets(unittest.TestCase):
         s  = SSR.erase_pencil(s, r, c, n, self.verbose)
         SSS.check_naked_pair(s, self.verbose)
 #         SSD.display_pencil(s)
-        self.assertTrue(numpy.all(s[8,3,1:8] == 0))
-        self.assertTrue(numpy.all(s[8,6,1:8] == 0))
-        self.assertTrue(numpy.all(s[8,3,8:10] != 0))
-        self.assertTrue(numpy.all(s[8,6,8:10] != 0))
-        self.assertTrue(numpy.all(s[8,4:6,8:10] == 0))
-        self.assertTrue(numpy.all(s[8,4:6,1:8] != 0))
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [8,[0,1,2,4,5,7,8],[8,9], "no 8 or 9"],
+            [8,[3,6],(1,8), "not anything else then 8 or 9"],
+        ]
+        tests_pencils = [
+            [8,[0,1,2,4,5,7,8],(1,8), "everything but 8 or 9"],
+            [8,[3,6],[8,9], "8 or 9"],
+            [(0,8),(0,9),(1,10), "other cells not affected"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+
 
 
 
     def test_check_naked_pair_block(self):
         """
+        Naked pair in block (1,1) (middle). Only block is affected.
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         r = 3
@@ -461,16 +491,34 @@ class Test_check_naked_subsets(unittest.TestCase):
         s  = SSR.erase_pencil(s, r, c, n, self.verbose)
         SSS.check_naked_pair(s, self.verbose)
 #         SSD.display_pencil(s)
-        self.assertTrue(numpy.all(s[3,3,1:8] == 0))
-        self.assertTrue(numpy.all(s[4,4,1:8] == 0))
-        self.assertTrue(numpy.all(s[3,3,8:10] != 0))
-        self.assertTrue(numpy.all(s[4,4,8:10] != 0))
-        self.assertTrue(numpy.all(s[0:3,0:3,1:10] != 0))
-        self.assertTrue(numpy.all(s[6:,6:,1:10] != 0))
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [3,[4,5],[8,9], "no 8 or 9"],
+            [4,[3,5],[8,9], "no 8 or 9"],
+            [5,[3,4,5],[8,9], "no 8 or 9"],
+            [3,3,(1,8), "nothing but 8 and 9"],
+            [4,4,(1,8), "nothing but 8 and 9"],
+        ]
+        tests_pencils = [
+            [3,[4,5],(1,8), "everything but 8 or 9"],
+            [4,[3,5],(1,8), "everything but 8 or 9"],
+            [5,[3,4,5],(1,8), "everything but 8 or 9"],
+            [3,3,[8,9], "nothing but 8 and 9"],
+            [4,4,[8,9], "nothing but 8 and 9"],        
+            [(0,9),(0,3),(1,10), "other cells not affected left 3 blocks"],
+            [(0,3),(3,6),(1,10), "other cells not affected block above"],
+            [(6,9),(3,6),(1,10), "other cells not affected block below"],
+            [(0,9),(6,9),(1,10), "other cells not affected right 3 blocks"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+
+
 
 
     def test_check_naked_pair_row_block(self):
         """
+        Naked pair is in both block and row.
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         r = 3
@@ -483,18 +531,34 @@ class Test_check_naked_subsets(unittest.TestCase):
         s  = SSR.erase_pencil(s, r, c, n, self.verbose)
         SSS.check_naked_pair(s, self.verbose)
 #         SSD.display_pencil(s)
-        self.assertTrue(numpy.all(s[3,3,1:8] == 0))
-        self.assertTrue(numpy.all(s[3,4,1:8] == 0))
-        self.assertTrue(numpy.all(s[3,3,8:10] != 0))
-        self.assertTrue(numpy.all(s[3,4,8:10] != 0))
-        self.assertTrue(numpy.all(s[0:3,0:3,1:10] != 0))
-        self.assertTrue(numpy.all(s[6:,6:,1:10] != 0))
-
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [3,5,[8,9], "no 8 or 9"],
+            [[4,5],[3,4,5],[8,9], "no 8 or 9"],
+            [3,3,(1,8), "nothing but 8 and 9"],
+            [3,4,(1,8), "nothing but 8 and 9"],
+        ]
+        tests_pencils = [
+            [3,(0,3),(1,8), "everything but 8 or 9 row left"],
+            [3,(5,9),(1,8), "everything but 8 or 9 row right and one in block"],
+            [[4,5],[3,4,5],(1,8), "everything but 8 or 9 block"],
+            [3,3,[8,9], "nothing but 8 and 9"],
+            [3,4,[8,9], "nothing but 8 and 9"],        
+            [(0,3),(0,9),(1,10), "other cells not affected top 3 blocks"],
+            [(6,9),(0,9),(1,10), "other cells not affected bottom 3 blocks"],
+            [[4,5],(0,3),(1,10), "most other cells not affected block left"],
+            [[4,5],(6,9),(1,10), "most other cells not affected block right"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+        
+ 
 
 
 
     def test_check_naked_triple_row(self):
         """
+        Naked triple in top row. Row should be affected, the rest not.
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         rc = [
@@ -507,20 +571,24 @@ class Test_check_naked_subsets(unittest.TestCase):
             s  = SSR.erase_pencil(s, _rc[0], _rc[1], n, self.verbose)
         SSS.check_naked_triple(s, self.verbose)
 #         SSD.display_pencil(s) 
-        for _rc in rc:
-            self.assertTrue(numpy.all(s[_rc[0],_rc[1],1:7] == 0))
-            self.assertTrue(numpy.all(s[_rc[0],_rc[1],7:10] != 0))
-        
-        self.assertTrue(numpy.all(s[0,1:3,1:7] != 0))
-        self.assertTrue(numpy.all(s[0,1:3,7:10] == 0))
-        
-
-
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [0,[0,3,6],(1,7), "no 7, 8 or 9"],
+            [0,[1,2,4,5,7,8],(7,10), "not 1-7"],
+        ]
+        tests_pencils = [
+            [0,[0,3,6],[7,8,9], "nothing but 7, 8 or 9"],
+            [0,[1,2,4,5,7,8],(1,7), "everything but 7, 8, 9"],
+            [(1,9),(0,9),(1,10), "Other cells not affected"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
 
 
 
     def test_check_naked_triple_row_partial(self):
         """
+        Naked triple in top row. Not all cells contain the digit. Row should be affected, the rest not.
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         rc = [
@@ -533,14 +601,24 @@ class Test_check_naked_subsets(unittest.TestCase):
         s[0,1,2] = 0    
         SSS.check_naked_triple(s, self.verbose)
 #         SSD.display_pencil(s) 
-        for _rc in rc:
-            self.assertTrue(numpy.all(s[_rc[0],_rc[1],_rc[2]] == 0))
-
-
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [0,[0,3,6],[1,3,4,5,7,9], "nothing but 2,6,8"],
+            [0,[1,2,4,5,7,8],[2,6,8], "nothing but 2,6,8"],
+            [0,6,8, "Partial naked triple, 8 misses"],
+        ]
+        tests_pencils = [
+            [0,[0,3],[2,6,8], "nothing but 2,6,8"],
+            [0,6,[2,6], "Partial naked triple, 8 misses"],
+            [0,[1,2,4,5,7,8],[1,3,4,5,7,9], "nothing but 2,6,8"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
 
 
     def test_check_naked_triple_col(self):
         """
+        Naked triple in column. Column should be affected, the rest not.
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         rc = [
@@ -552,16 +630,24 @@ class Test_check_naked_subsets(unittest.TestCase):
         for _rc in rc:       
             s  = SSR.erase_pencil(s, _rc[0], _rc[1], n, self.verbose)
         SSS.check_naked_triple(s, self.verbose)
-#         SSD.display_pencil(s) 
-        for _rc in rc:
-            self.assertTrue(numpy.all(s[_rc[0],_rc[1],1:7] == 0))
-            self.assertTrue(numpy.all(s[_rc[0],_rc[1],7:10] != 0))
-        
-        self.assertTrue(numpy.all(s[1:3,0,1:7] != 0))
-        self.assertTrue(numpy.all(s[1:3,0,7:10] == 0))
+#         SSD.display_pencil(s)         
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [[0,3,6],0,(1,7), "no 7, 8 or 9"],
+            [[1,2,4,5,7,8],0,(7,10), "not 1-7"],
+        ]
+        tests_pencils = [
+            [[0,3,6],0,[7,8,9], "nothing but 7, 8 or 9"],
+            [[1,2,4,5,7,8],0,(1,7), "everything but 7, 8, 9"],
+            [(0,9),(1,9),(1,10), "Other cells not affected"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)        
+
 
     def test_check_naked_triple_col_with_1_complete(self):
         """
+        Naked triple in column. 1 value is already finished Column should be affected, the rest not.
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         
@@ -578,17 +664,23 @@ class Test_check_naked_subsets(unittest.TestCase):
             s  = SSR.erase_pencil(s, _rc[0], _rc[1], n, self.verbose) 
         SSS.check_naked_triple(s, self.verbose)
 #         SSD.display_pencil(s) 
-        for _rc in rc:
-            self.assertTrue(numpy.all(s[_rc[0],_rc[1],1:7] == 0))
-            self.assertTrue(numpy.all(s[_rc[0],_rc[1],7:10] != 0))
-        
-#         self.assertTrue(numpy.all(s[1:3,1,2:7] != 0))
-        self.assertTrue(numpy.all(s[1:3,1,7:10] == 0))
-
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [[0,3,6],1,(1,7), "not 1-7"],
+            [[1,2,4,5,7,8],1,(7,10), "not 1-7"],
+        ]
+        tests_pencils = [
+            [[0,3,6],1,[7,8,9], "nothing but 7, 8 or 9"],
+            [[2,4,5,7,8],1,(2,7), "everything but 7, 8, 9"],
+            [(0,2),(2,9),(2,10), "Other cells not affected (limited)"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)        
 
         
     def test_check_naked_triple_block(self):
         """
+        Naked triple in block. Only block should be affected.
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         rc = [
@@ -600,13 +692,28 @@ class Test_check_naked_subsets(unittest.TestCase):
             s  = SSR.erase_pencil(s, _rc[0], _rc[1], _rc[2], self.verbose)        
         SSS.check_naked_triple(s, self.verbose)
 #         SSD.display_pencil(s)
-        self.assertTrue(numpy.all(s[0,0,(2,6,8)] != 0))
-        self.assertTrue(numpy.all(s[2,0,(2,6,8)] != 0))
-        self.assertTrue(numpy.all(s[1,1,(2,6,8)] != 0))
-        self.assertTrue(numpy.all(s[0,0,rc[0][2]] == 0))
-        self.assertTrue(numpy.all(s[2,0,rc[0][2]] == 0))
-        self.assertTrue(numpy.all(s[1,1,rc[0][2]] == 0))
-        self.assertTrue(numpy.all(s[3:,:,1:10] != 0))
+        test_filled = [
+        ]
+        test_no_pencil = [ 
+            [0,0,[1,3,4,5,7,9], "not other"],
+            [2,0,[1,3,4,5,7,9], "not other"],
+            [1,1,[1,3,4,5,7,9], "not other"],
+            [0,[1,2],[2,6,8], "not vals"],
+            [1,[0,2],[2,6,8], "not vals"],
+            [2,[1,2],[2,6,8], "not vals"],
+        ]
+        tests_pencils = [
+            [0,0,[2,6,8], "not other"],
+            [2,0,[2,6,8], "not other"],
+            [1,1,[2,6,8], "not other"],
+            [0,[1,2],[1,3,4,5,7,9], "not vals"],
+            [1,[0,2],[1,3,4,5,7,9], "not vals"],
+            [2,[1,2],[1,3,4,5,7,9], "not vals"],  
+            [(0,9),(3,9),(1,10), "others not affected 6 cols to left"],
+            [(3,9),(0,3),(1,10), "others not affect 2 blocks below"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)        
+
 
 
 
@@ -625,16 +732,24 @@ class Test_check_naked_subsets(unittest.TestCase):
             s  = SSR.erase_pencil(s, _rc[0], _rc[1], n, self.verbose)
         SSS.check_naked_quad(s, self.verbose)
 #         SSD.display_pencil(s) 
-        for _rc in rc:
-            self.assertTrue(numpy.all(s[_rc[0],_rc[1],1:6] == 0))
-            self.assertTrue(numpy.all(s[_rc[0],_rc[1],6:10] != 0))
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [[0,3,4,6],0,(1,6), "no 6, 7, 8 or 9"],
+            [[1,2,5,7,8],0,(6,10), "not 1-6"],
+        ]
+        tests_pencils = [
+            [[0,3,4,6],0,[6,7,8,9], "nothing but 6, 7, 8 or 9"],
+            [[1,2,5,7,8],0,(1,6), "everything but 6, 7, 8, 9"],
+            [(0,9),(1,9),(1,10), "Other cells not affected"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils) 
         
-        self.assertTrue(numpy.all(s[1:3,0,1:6] != 0))
-        self.assertTrue(numpy.all(s[1:3,0,6:10] == 0))
 
 
     def test_check_naked_quad_row(self):
         """
+        Naked quad in a row.
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         rc = [
@@ -648,12 +763,19 @@ class Test_check_naked_subsets(unittest.TestCase):
             s  = SSR.erase_pencil(s, _rc[0], _rc[1], n, self.verbose)
         SSS.check_naked_quad(s, self.verbose)
 #         SSD.display_pencil(s) 
-        for _rc in rc:
-            self.assertTrue(numpy.all(s[_rc[0],_rc[1],1:6] == 0))
-            self.assertTrue(numpy.all(s[_rc[0],_rc[1],6:10] != 0))
-        
-        self.assertTrue(numpy.all(s[0,:,1:10] != 0))
-
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [1,[1,4,5,7],(1,6), "not 6, 7, 8 or 9"],
+            [1,[0,2,3,6,8],(6,10), "not 1-6"],
+        ]
+        tests_pencils = [
+            [1,[1,4,5,7],[6,7,8,9], "nothing but 6, 7, 8 or 9"],
+            [1,[0,2,3,6,8],(1,6), "everything but 6, 7, 8, 9"],
+            [0,(0,9),(1,10), "Other cells not affected"],
+            [(2,9),(0,9),(1,10), "Other cells not affected"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
 
 
     def test_check_naked_quad_block(self):
@@ -670,9 +792,34 @@ class Test_check_naked_subsets(unittest.TestCase):
             s  = SSR.erase_pencil(s, _rc[0], _rc[1], _rc[2], self.verbose)        
         SSS.check_naked_quad(s, self.verbose)
 #         SSD.display_pencil(s)
+        test_filled = [
+        ]
+        test_no_pencil = [ 
+            [0,0,[1,4,5,7,9], "not other"],
+            [2,0,[1,4,5,7,9], "not other"],
+            [1,1,[1,4,5,7,9], "not other"],
+            [2,1,[1,4,5,7,9], "not other"],
+            [0,[1,2],[2,3,6,8], "not vals"],
+            [1,[0,2],[2,3,6,8], "not vals"],
+            [2,2,[2,3,6,8], "not vals"],
+        ]
+        tests_pencils = [
+            [0,0,[2,3,6,8], "not other"],
+            [2,0,[2,3,6,8], "not other"],
+            [1,1,[2,3,6,8], "not other"],
+            [2,1,[2,3,6,8], "not other"],
+            [0,[1,2],[1,4,5,7,9], "not vals"],
+            [1,[0,2],[1,4,5,7,9], "not vals"],
+            [2,2,[1,4,5,7,9], "not vals"],  
+            [(0,9),(3,9),(1,10), "others not affected 6 cols to left"],
+            [(3,9),(0,3),(1,10), "others not affect 2 blocks below"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)        
+
+
+        
         for _rc in rc:
             self.assertTrue(numpy.all(s[_rc[0],_rc[1],_rc[2]] == 0))
-
 
 
 class Test_check_hidden_subsets(unittest.TestCase):
@@ -680,8 +827,38 @@ class Test_check_hidden_subsets(unittest.TestCase):
     def setUp(self):
         self.verbose = 1
 
+    def do_tests(self, s, test_filled, test_no_pencil, tests_pencils):
+        for test in test_filled:
+            r,c,n = make_range(test)
+            for _r in r:
+                for _c in c:
+                    for _n in n:
+                        with self.subTest(test[3]):
+                            self.assertTrue(numpy.all(s[_r,_c,0] == _n))  
+
+
+        for test in test_no_pencil:
+            r,c,n = make_range(test)
+            for _r in r:
+                for _c in c:
+                    for _n in n:
+                        with self.subTest(test[3]):
+                            self.assertTrue(numpy.all(s[_r,_c,_n] == 0))  
+
+        for test in tests_pencils:
+            r,c,n = make_range(test)
+            for _r in r:
+                for _c in c:
+                    for _n in n:
+                        with self.subTest(test[3]):
+                            self.assertTrue(numpy.all(s[_r,_c,_n] == _n))  
+
+
+
     def test_check_hidden_pair_col(self):
         """
+        Hidden pair: N digits are possible in N cells in a house. Other pencil marks should be removed from the N cells.
+        
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         except_r = [4,6]
@@ -689,13 +866,23 @@ class Test_check_hidden_subsets(unittest.TestCase):
         s  = SSR.erase_pencil_col(s, except_r = except_r, c = c, n = [1,3], verbose = self.verbose) 
         s = SSS.check_hidden_pair(s, self.verbose)
 #         SSD.display_pencil(s)
-        self.assertTrue(numpy.all(s[4,2,(1,3)] != 0))
-        self.assertTrue(numpy.all(s[6,2,(1,3)] != 0))
-        self.assertTrue(numpy.all(s[0:4,2,(1,3)] == 0))
-        self.assertTrue(numpy.all(s[5,2,(1,3)] == 0))
-        self.assertTrue(numpy.all(s[7:9,2,(1,3)] == 0))
-        self.assertTrue(numpy.all(s[0:9,3:,(1,3)] != 0))
+        test_filled = [
+#             [0,0,1,"test test"]
+        ]
+        test_no_pencil = [
+            [[4,6],2,[2,4,5,6,7,8,9], "removed pencil marks"],
+            [[0,1,2,3,5,7,8],2,[1,3], "other cells don't contain 1 and 3"],
+        ]
+        tests_pencils = [
+            [[4,6],2,[1,3], "remaining pencil marks"],
+            [[0,1,2,3,5,7,8],2,[2,4,5,6,7,8,9], "remaining pencil marks other cells."], # more a test for erase function, really
+            [(0,9),[0,1],(1,10), "cells to the left unaffected"],
+            [(0,9),(3,9),(1,10), "cells to the right unaffected"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
         
+        
+  
     def test_check_hidden_pair_row(self):
         """
         """
@@ -706,16 +893,25 @@ class Test_check_hidden_subsets(unittest.TestCase):
         s  = SSR.erase_pencil_row(s, r = r, except_c = except_c, n = [1,3], verbose = self.verbose) 
         s = SSS.check_hidden_pair(s, self.verbose)
 #         SSD.display_pencil(s)
-        self.assertTrue(numpy.all(s[2,4,(1,3)] != 0))
-        self.assertTrue(numpy.all(s[2,6,(1,3)] != 0))
-        self.assertTrue(numpy.all(s[2,0:4,(1,3)] == 0))
-        self.assertTrue(numpy.all(s[2,5,(1,3)] == 0))
-        self.assertTrue(numpy.all(s[2,7:9,(1,3)] == 0))
-        self.assertTrue(numpy.all(s[3:,0:9,(1,3)] != 0))
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [2,[4,6],[2,4,5,6,7,8,9], "removed pencil marks"],
+            [2,[0,1,2,3,5,7,8],[1,3], "other cells don't contain 1 and 3"],
+        ]
+        tests_pencils = [
+            [2,[4,6],[1,3], "remaining pencil marks"],
+            [2,[0,1,2,3,5,7,8],[2,4,5,6,7,8,9], "remaining pencil marks other cells."], # more a test for erase function, really
+            [[0,1],(0,9),(1,10), "cells to the top unaffected"],
+            [(3,9),(0,9),(1,10), "cells to the bottom unaffected"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+        
 
 
     def test_check_hidden_pair_block(self):
         """
+        Hidden pair: N digits are possible in N cells in a house. Other pencil marks should be removed from the N cells.
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         
@@ -724,13 +920,29 @@ class Test_check_hidden_subsets(unittest.TestCase):
         s  = SSR.erase_pencil_block(s, br = 0, bc = 1, except_rc = except_rc, n = [1,3], verbose = self.verbose) 
         s = SSS.check_hidden_pair(s, self.verbose)
 #         SSD.display_pencil(s)
-        self.assertTrue(numpy.all(s[1,4,(1,3)] != 0))
-        self.assertTrue(numpy.all(s[2,5,(1,3)] != 0))
-        self.assertTrue(numpy.all(s[0,3:6,(1,3)] == 0))
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [1,4,[2,4,5,6,7,8,9], "removed pencil marks"],
+            [2,5,[2,4,5,6,7,8,9], "removed pencil marks"],
+            [0,(3,6),[1,3], "other cells don't contain 1 and 3"],
+            [1,[3,5],[1,3], "other cells don't contain 1 and 3"],
+            [2,[3,4],[1,3], "other cells don't contain 1 and 3"],
+        ]
+        tests_pencils = [
+            [1,4,[1,3], "remaining pencil marks"],
+            [2,5,[1,3], "remaining pencil marks"],
+            [(0,3),(0,3),(1,10), "cells to the left unaffected"],
+            [(0,3),(6,9),(1,10), "cells to the right unaffected"],
+            [(3,9),(0,9),(1,10), "cells to the bottom unaffected"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
 
 
     def test_check_hidden_pair_block_row(self):
         """
+        Hidden pair: N digits are possible in N cells in a house. Other pencil marks should be removed from the N cells. In this case it exists in both a block and row. 
+        Note: a naked pair is left. That has to be found with a different function.
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         
@@ -738,17 +950,30 @@ class Test_check_hidden_subsets(unittest.TestCase):
         except_rc = [[1,4],[1,5]]
         s  = SSR.erase_pencil_block(s, br = 0, bc = 1, except_rc = except_rc, n = [1,3], verbose = self.verbose) 
         r = 1
-        except_c = [4,5]
-        s  = SSR.erase_pencil_row(s, r = r, except_c = except_c, n = [1,3], verbose = self.verbose) 
         s = SSS.check_hidden_pair(s, self.verbose)
 #         SSD.display_pencil(s)
-        self.assertTrue(numpy.all(s[1,4,(1,3)] != 0))
-        self.assertTrue(numpy.all(s[1,5,(1,3)] != 0))
-        self.assertTrue(numpy.all(s[0,3:6,(1,3)] == 0))
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [1,[4,5],[2,4,5,6,7,8,9], "removed pencil marks"],
+            [0,(3,6),[1,3], "other cells don't contain 1 and 3"],
+            [1,3,[1,3], "other cells don't contain 1 and 3"],
+            [2,(3,6),[1,3], "other cells don't contain 1 and 3"],
+        ]
+        tests_pencils = [
+            [1,[4,5],[1,3], "remaining pencil marks"],
+            [(0,3),(0,3),(1,10), "cells to the left unaffected"],
+            [(0,3),(6,9),(1,10), "cells to the right unaffected"],
+            [(3,9),(0,9),(1,10), "cells to the bottom unaffected"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+        
+    
 
 
     def test_check_hidden_triple_col(self):
         """
+        Hidden triple: N digits are possible in N cells in a house. Other pencil marks should be removed from the N cells.
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
         except_r = [2,4,6]
@@ -756,13 +981,19 @@ class Test_check_hidden_subsets(unittest.TestCase):
         s  = SSR.erase_pencil_col(s, except_r = except_r, c = c, n = [1,3,7], verbose = self.verbose) 
         s = SSS.check_hidden_triple(s, self.verbose)
 #         SSD.display_pencil(s)
-        self.assertTrue(numpy.all(s[2,2,(1,3,7)] != 0))
-        self.assertTrue(numpy.all(s[4,2,(1,3,7)] != 0))
-        self.assertTrue(numpy.all(s[6,2,(1,3,7)] != 0))
-        self.assertTrue(numpy.all(s[0:2,2,(1,3,7)] == 0))
-        self.assertTrue(numpy.all(s[3,2,(1,3,7)] == 0))
-        self.assertTrue(numpy.all(s[5,2,(1,3,7)] == 0))
-        self.assertTrue(numpy.all(s[7:9,2,(1,3,7)] == 0))
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [[2,4,6],2,[2,4,5,6,8,9], "removed pencil marks"],
+            [[0,1,3,5,7,8],2,[1,3,7], "other cells don't contain 1, 3 and 7"],
+        ]
+        tests_pencils = [
+            [[2,4,6],2,[1,3,7], "remaining pencil marks"],
+            [[0,1,3,5,7,8],2,[2,4,5,6,8,9], "remaining pencil marks other cells."], # more a test for erase function, really
+            [(0,9),[0,1],(1,10), "cells to the left unaffected"],
+            [(0,9),(3,9),(1,10), "cells to the right unaffected"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
 
 
     def test_check_hidden_triple_col_incomplete(self):
@@ -776,13 +1007,23 @@ class Test_check_hidden_subsets(unittest.TestCase):
         s[4,2,7] = 0
         s = SSS.check_hidden_triple(s, self.verbose)
 #         SSD.display_pencil(s)
-        self.assertTrue(numpy.all(s[2,2,(3,7)] != 0))
-        self.assertTrue(numpy.all(s[4,2,(1,3)] != 0))
-        self.assertTrue(numpy.all(s[6,2,(1,3,7)] != 0))
-        self.assertTrue(numpy.all(s[0:2,2,(1,3,7)] == 0))
-        self.assertTrue(numpy.all(s[3,2,(1,3,7)] == 0))
-        self.assertTrue(numpy.all(s[5,2,(1,3,7)] == 0))
-        self.assertTrue(numpy.all(s[7:9,2,(1,3,7)] == 0))
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [[2,4,6],2,[2,4,5,6,8,9], "removed pencil marks"],
+            [[0,1,3,5,7,8],2,[1,3,7], "other cells don't contain 1, 3 and 7"],
+        ]
+        tests_pencils = [
+            [2,2,[3,7], "remaining pencil marks"],
+            [4,2,[1,3], "remaining pencil marks"],
+            [6,2,[1,3,7], "remaining pencil marks"],
+            [[0,1,3,5,7,8],2,[2,4,5,6,8,9], "remaining pencil marks other cells."], # more a test for erase function, really
+            [(0,9),[0,1],(1,10), "cells to the left unaffected"],
+            [(0,9),(3,9),(1,10), "cells to the right unaffected"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+        
+
 
 
     def test_check_hidden_triple_row(self):
@@ -794,14 +1035,19 @@ class Test_check_hidden_subsets(unittest.TestCase):
         s  = SSR.erase_pencil_row(s, r = r, except_c = except_c, n = [1,3,7], verbose = self.verbose) 
         s = SSS.check_hidden_triple(s, self.verbose)
 #         SSD.display_pencil(s)
-        self.assertTrue(numpy.all(s[2,2,(1,3,7)] != 0))
-        self.assertTrue(numpy.all(s[2,4,(1,3,7)] != 0))
-        self.assertTrue(numpy.all(s[2,6,(1,3,7)] != 0))
-        self.assertTrue(numpy.all(s[2,0:2,(1,3,7)] == 0))
-        self.assertTrue(numpy.all(s[2,3,(1,3,7)] == 0))
-        self.assertTrue(numpy.all(s[2,5,(1,3,7)] == 0))
-        self.assertTrue(numpy.all(s[2,7:9,(1,3,7)] == 0))
-
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [2,[2,4,6],[2,4,5,6,8,9], "removed pencil marks"],
+            [2,[0,1,3,5,7,8],[1,3,7], "other cells don't contain 1 and 3"],
+        ]
+        tests_pencils = [
+            [2,[2,4,6],[1,3,7], "remaining pencil marks"],
+            [2,[0,1,3,5,7,8],[2,4,5,6,8,9], "remaining pencil marks other cells."], # more a test for erase function, really
+            [[0,1],(0,9),(1,10), "cells to the top unaffected"],
+            [(3,9),(0,9),(1,10), "cells to the bottom unaffected"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
 
     def test_check_hidden_triple_row_incomplete(self):
         """
@@ -814,16 +1060,23 @@ class Test_check_hidden_subsets(unittest.TestCase):
         s[2,4,7] = 0
         s = SSS.check_hidden_triple(s, self.verbose)
 #         SSD.display_pencil(s)
-        self.assertTrue(numpy.all(s[2,2,(3,7)] != 0))
-        self.assertTrue(numpy.all(s[2,4,(1,3)] != 0))
-        self.assertTrue(numpy.all(s[2,6,(1,3,7)] != 0))
-        self.assertTrue(numpy.all(s[2,0:2,(1,3,7)] == 0))
-        self.assertTrue(numpy.all(s[2,3,(1,3,7)] == 0))
-        self.assertTrue(numpy.all(s[2,5,(1,3,7)] == 0))
-        self.assertTrue(numpy.all(s[2,7:9,(1,3,7)] == 0))
-
-
-
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [2,[2,4,6],[2,4,5,6,8,9], "removed pencil marks"],
+            [2,[0,1,3,5,7,8],[1,3,7], "other cells don't contain 1 and 3"],
+        ]
+        tests_pencils = [
+            [2,2,[3,7], "remaining pencil marks"],
+            [2,4,[1,3], "remaining pencil marks"],
+            [2,6,[1,3,7], "remaining pencil marks"],
+            [2,[0,1,3,5,7,8],[2,4,5,6,8,9], "remaining pencil marks other cells."], # more a test for erase function, really
+            [[0,1],(0,9),(1,10), "cells to the top unaffected"],
+            [(3,9),(0,9),(1,10), "cells to the bottom unaffected"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+        
+        
 
     def test_check_hidden_triple_block(self):
         """
@@ -835,10 +1088,26 @@ class Test_check_hidden_subsets(unittest.TestCase):
         s  = SSR.erase_pencil_block(s, br = br, bc = bc, except_rc = except_rc, n = [1,3,7], verbose = self.verbose) 
         s = SSS.check_hidden_triple(s, self.verbose)
 #         SSD.display_pencil(s)
-        self.assertTrue(numpy.all(s[1,3,(1,3,7)] != 0))
-        self.assertTrue(numpy.all(s[1,4,(1,3,7)] != 0))
-        self.assertTrue(numpy.all(s[2,5,(1,3,7)] != 0))
-        self.assertTrue(numpy.all(s[0,3:6,(1,3,7)] == 0))
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [1,4,[2,4,5,6,8,9], "removed pencil marks"],
+            [2,5,[2,4,5,6,8,9], "removed pencil marks"],
+            [2,5,[2,4,5,6,8,9], "removed pencil marks"],
+            [0,(3,6),[1,3,7], "other cells don't contain 1, 3, 7 A"],
+            [1,5,[1,3,7], "other cells don't contain 1, 3, 7 B"],
+            [2,[3,4],[1,3,7], "other cells don't contain 1, 3, 7 C"],
+        ]
+        tests_pencils = [
+            [1,4,[1,3,7], "remaining pencil marks"],
+            [2,5,[1,3,7], "remaining pencil marks"],
+            [1,3,[1,3,7], "remaining pencil marks"],
+            [(0,3),(0,3),(1,10), "cells to the left unaffected"],
+            [(0,3),(6,9),(1,10), "cells to the right unaffected"],
+            [(3,9),(0,9),(1,10), "cells to the bottom unaffected"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+
 
 
     def test_check_hidden_triple_block_incomplete(self):
@@ -853,10 +1122,26 @@ class Test_check_hidden_subsets(unittest.TestCase):
         s[2,5,7] = 0
         s = SSS.check_hidden_triple(s, self.verbose)
 #         SSD.display_pencil(s)
-        self.assertTrue(numpy.all(s[1,3,(1,3,7)] != 0))
-        self.assertTrue(numpy.all(s[1,4,(3,7)] != 0))
-        self.assertTrue(numpy.all(s[2,5,(1,3)] != 0))
-        self.assertTrue(numpy.all(s[0,3:6,(1,3,7)] == 0))
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [1,4,[2,4,5,6,8,9], "removed pencil marks"],
+            [2,5,[2,4,5,6,8,9], "removed pencil marks"],
+            [2,5,[2,4,5,6,8,9], "removed pencil marks"],
+            [0,(3,6),[1,3,7], "other cells don't contain 1, 3, 7 A"],
+            [1,5,[1,3,7], "other cells don't contain 1, 3, 7 B"],
+            [2,[3,4],[1,3,7], "other cells don't contain 1, 3, 7 C"],
+        ]
+        tests_pencils = [
+            [1,4,[3,7], "remaining pencil marks"],
+            [2,5,[1,3], "remaining pencil marks"],
+            [1,3,[1,3,7], "remaining pencil marks"],
+            [(0,3),(0,3),(1,10), "cells to the left unaffected"],
+            [(0,3),(6,9),(1,10), "cells to the right unaffected"],
+            [(3,9),(0,9),(1,10), "cells to the bottom unaffected"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+
 
 
     def test_check_hidden_quad_col(self):
@@ -869,12 +1154,21 @@ class Test_check_hidden_subsets(unittest.TestCase):
         s  = SSR.erase_pencil_col(s, except_r = except_r, c = c, n = n, verbose = self.verbose) 
         s = SSS.check_hidden_quad(s, self.verbose)
 #         SSD.display_pencil(s)
-        for _r in except_r:
-            self.assertTrue(numpy.all(s[_r,2,n] != 0))
-        self.assertTrue(numpy.all(s[0:2,c,n] == 0))
-        self.assertTrue(numpy.all(s[3,c,n] == 0))
-        self.assertTrue(numpy.all(s[5,c,n] == 0))
-        self.assertTrue(numpy.all(s[7,c,n] == 0))
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [[2,4,6,8],2,[2,5,6,8,9], "removed pencil marks"],
+            [[0,1,3,5,7],2,[1,3,4,7], "other cells don't contain 1, 3 and 7"],
+        ]
+        tests_pencils = [
+            [[2,4,6,8],2,[1,3,4,7], "remaining pencil marks"],
+            [[0,1,3,5,7],2,[2,5,6,8,9], "remaining pencil marks other cells."], # more a test for erase function, really
+            [(0,9),[0,1],(1,10), "cells to the left unaffected"],
+            [(0,9),(3,9),(1,10), "cells to the right unaffected"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+        
+
 
 
     def test_check_hidden_quad_row(self):
@@ -887,12 +1181,20 @@ class Test_check_hidden_subsets(unittest.TestCase):
         s  = SSR.erase_pencil_row(s, r = r, except_c = except_c, n = n, verbose = self.verbose) 
         s = SSS.check_hidden_quad(s, self.verbose)
 #         SSD.display_pencil(s)
-        for _c in except_c:
-            self.assertTrue(numpy.all(s[r,_c,n] != 0))
-        self.assertTrue(numpy.all(s[r,0:2,n] == 0))
-        self.assertTrue(numpy.all(s[r,3,n] == 0))
-        self.assertTrue(numpy.all(s[r,5,n] == 0))
-        self.assertTrue(numpy.all(s[r,7,n] == 0))
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [2,[2,4,6,8],[2,5,6,8,9], "removed pencil marks"],
+            [2,[0,1,3,5,7],[1,3,4,7], "other cells don't contain 1 and 3"],
+        ]
+        tests_pencils = [
+            [2,[2,4,6,8],[1,3,4,7], "remaining pencil marks"],
+            [2,[0,1,3,5,7],[2,5,6,8,9], "remaining pencil marks other cells."], # more a test for erase function, really
+            [[0,1],(0,9),(1,10), "cells to the top unaffected"],
+            [(3,9),(0,9),(1,10), "cells to the bottom unaffected"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+
 
 
     def test_check_hidden_quad_block(self):
@@ -906,9 +1208,28 @@ class Test_check_hidden_subsets(unittest.TestCase):
         s  = SSR.erase_pencil_block(s, br = br, bc = bc, except_rc = except_rc, n = n, verbose = self.verbose) 
         s = SSS.check_hidden_quad(s, self.verbose)
 #         SSD.display_pencil(s)
-        for _rc in except_rc:
-            self.assertTrue(numpy.all(s[_rc[0],_rc[1],n] != 0))  
-
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [0,4,[4,5,6,8,9], "removed pencil marks"],
+            [1,3,[4,5,6,8,9], "removed pencil marks"],
+            [1,4,[4,5,6,8,9], "removed pencil marks"],
+            [2,5,[4,5,6,8,9], "removed pencil marks"],
+            [0,[3,5],[1,2,3,7], "other cells don't contain 1,2,3,7 top row of block"],
+            [1,5,[1,2,3,7], "other cells don't contain 1,2,3,7 middle row of block"],
+            [2,[3,4],[1,2,3,7], "other cells don't contain 1,2,3,7 bottom row of block"],
+        ]
+        tests_pencils = [
+            [0,4,[1,2,3,7], "remaining pencil marks"],
+            [1,3,[1,2,3,7], "remaining pencil marks"],
+            [1,4,[1,2,3,7], "remaining pencil marks"],
+            [2,5,[1,2,3,7], "remaining pencil marks"],
+            [(0,3),(0,3),(1,10), "cells to the left unaffected"],
+            [(0,3),(6,9),(1,10), "cells to the right unaffected"],
+            [(3,9),(0,9),(1,10), "cells to the bottom unaffected"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+        
 
     def test_check_hidden_quad_block_incomplete(self):
         """
@@ -922,12 +1243,27 @@ class Test_check_hidden_subsets(unittest.TestCase):
         s[0,4,1] = 0
         s = SSS.check_hidden_quad(s, self.verbose)
 #         SSD.display_pencil(s)
-        for _rc in except_rc:
-            if _rc[0] == 0:
-                self.assertTrue(numpy.all(s[_rc[0],_rc[1],[2,3,7]] != 0))  
-            else:
-                self.assertTrue(numpy.all(s[_rc[0],_rc[1],n] != 0))  
-
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [0,4,[4,5,6,8,9], "removed pencil marks"],
+            [1,3,[4,5,6,8,9], "removed pencil marks"],
+            [1,4,[4,5,6,8,9], "removed pencil marks"],
+            [2,5,[4,5,6,8,9], "removed pencil marks"],
+            [0,[3,5],[1,2,3,7], "other cells don't contain 1,2,3,7 top row of block"],
+            [1,5,[1,2,3,7], "other cells don't contain 1,2,3,7 middle row of block"],
+            [2,[3,4],[1,2,3,7], "other cells don't contain 1,2,3,7 bottom row of block"],
+        ]
+        tests_pencils = [
+            [0,4,[2,3,7], "remaining pencil marks"],
+            [1,3,[1,2,3,7], "remaining pencil marks"],
+            [1,4,[1,2,3,7], "remaining pencil marks"],
+            [2,5,[1,2,3,7], "remaining pencil marks"],
+            [(0,3),(0,3),(1,10), "cells to the left unaffected"],
+            [(0,3),(6,9),(1,10), "cells to the right unaffected"],
+            [(3,9),(0,9),(1,10), "cells to the bottom unaffected"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
 
 
 class Test_check_wings(unittest.TestCase):
