@@ -104,6 +104,7 @@ class Test_singles(unittest.TestCase):
         ]
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
 
+
     def test_check_last_digit_sudoku_finished(self):
         """
         This is not a valid sudoku, but that is not important here. 
@@ -157,8 +158,6 @@ class Test_singles(unittest.TestCase):
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
         self.assertFalse(f)
         
-        
-
 
     def test_full_house_block(self):
         """
@@ -222,6 +221,7 @@ class Test_check_naked_subsets(unittest.TestCase):
                         with self.subTest(test[3]):
                             self.assertTrue(numpy.all(s[_r,_c,_n] == _n))  
 
+
     def test_check_naked_pair_col(self):
         """
         Two squares can hold exactly two (the same) values. The values can be removed from the other squares in the column. 
@@ -283,7 +283,6 @@ class Test_check_naked_subsets(unittest.TestCase):
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
 
 
-
     def test_check_naked_pair_col_with_col_complete(self):
         """
         Similar to ``test_check_naked_pair_col``, but now with the a column already finished. This is to test the mechanism where finished cols are not checked. 
@@ -313,7 +312,6 @@ class Test_check_naked_subsets(unittest.TestCase):
             [(0,6),2,[8,9], "8 and 9 present in c=2"],
         ]
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
-
 
 
     def test_check_naked_pair_col_with_col_complete_2(self):
@@ -346,7 +344,6 @@ class Test_check_naked_subsets(unittest.TestCase):
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
 
 
-
     def test_check_naked_pair_col_with_col_complete_3(self):
         """
         Similar to above, but with naked pair in column 0 (the last column).
@@ -375,7 +372,6 @@ class Test_check_naked_subsets(unittest.TestCase):
             [(0,6),1,[8,9], "8 and 9 present in c=1"],
         ]
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
-
 
 
     def test_check_naked_pair_col_with_row_complete(self):
@@ -408,9 +404,7 @@ class Test_check_naked_subsets(unittest.TestCase):
             [(2,9),(2,6),[8,9], "8 and 9 present in columns (but not in left three cols because last two rows contain 8 and 9"],
         ]
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
-        
-
-        
+               
         
     def test_check_naked_pair_col_with_row_complete_2(self):
         """
@@ -442,8 +436,7 @@ class Test_check_naked_subsets(unittest.TestCase):
             [(2,9),(2,6),[8,9], "8 and 9 present in columns (but not in left three cols because last two rows contain 8 and 9"],
         ]
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
-
-        
+    
 
     def test_check_naked_pair_row(self):
         """
@@ -472,8 +465,6 @@ class Test_check_naked_subsets(unittest.TestCase):
             [(0,8),(0,9),(1,10), "other cells not affected"],
         ]
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
-
-
 
 
     def test_check_naked_pair_block(self):
@@ -514,8 +505,6 @@ class Test_check_naked_subsets(unittest.TestCase):
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
 
 
-
-
     def test_check_naked_pair_row_block(self):
         """
         Naked pair is in both block and row.
@@ -552,9 +541,6 @@ class Test_check_naked_subsets(unittest.TestCase):
         ]
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
         
- 
-
-
 
     def test_check_naked_triple_row(self):
         """
@@ -583,7 +569,6 @@ class Test_check_naked_subsets(unittest.TestCase):
             [(1,9),(0,9),(1,10), "Other cells not affected"],
         ]
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
-
 
 
     def test_check_naked_triple_row_partial(self):
@@ -715,8 +700,6 @@ class Test_check_naked_subsets(unittest.TestCase):
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)        
 
 
-
-
     def test_check_naked_quad_col(self):
         """
         """
@@ -745,7 +728,6 @@ class Test_check_naked_subsets(unittest.TestCase):
         ]
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils) 
         
-
 
     def test_check_naked_quad_row(self):
         """
@@ -827,6 +809,7 @@ class Test_check_hidden_subsets(unittest.TestCase):
     def setUp(self):
         self.verbose = 1
 
+
     def do_tests(self, s, test_filled, test_no_pencil, tests_pencils):
         for test in test_filled:
             r,c,n = make_range(test)
@@ -852,7 +835,6 @@ class Test_check_hidden_subsets(unittest.TestCase):
                     for _n in n:
                         with self.subTest(test[3]):
                             self.assertTrue(numpy.all(s[_r,_c,_n] == _n))  
-
 
 
     def test_check_hidden_pair_col(self):
@@ -882,7 +864,6 @@ class Test_check_hidden_subsets(unittest.TestCase):
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
         
         
-  
     def test_check_hidden_pair_row(self):
         """
         """
@@ -907,7 +888,6 @@ class Test_check_hidden_subsets(unittest.TestCase):
         ]
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
         
-
 
     def test_check_hidden_pair_block(self):
         """
@@ -969,8 +949,6 @@ class Test_check_hidden_subsets(unittest.TestCase):
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
         
     
-
-
     def test_check_hidden_triple_col(self):
         """
         Hidden triple: N digits are possible in N cells in a house. Other pencil marks should be removed from the N cells.
@@ -1024,8 +1002,6 @@ class Test_check_hidden_subsets(unittest.TestCase):
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
         
 
-
-
     def test_check_hidden_triple_row(self):
         """
         """
@@ -1048,6 +1024,7 @@ class Test_check_hidden_subsets(unittest.TestCase):
             [(3,9),(0,9),(1,10), "cells to the bottom unaffected"],
         ]
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+
 
     def test_check_hidden_triple_row_incomplete(self):
         """
@@ -1077,7 +1054,6 @@ class Test_check_hidden_subsets(unittest.TestCase):
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
         
         
-
     def test_check_hidden_triple_block(self):
         """
         """
@@ -1107,7 +1083,6 @@ class Test_check_hidden_subsets(unittest.TestCase):
             [(3,9),(0,9),(1,10), "cells to the bottom unaffected"],
         ]
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
-
 
 
     def test_check_hidden_triple_block_incomplete(self):
@@ -1143,7 +1118,6 @@ class Test_check_hidden_subsets(unittest.TestCase):
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
 
 
-
     def test_check_hidden_quad_col(self):
         """
         """
@@ -1169,8 +1143,6 @@ class Test_check_hidden_subsets(unittest.TestCase):
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
         
 
-
-
     def test_check_hidden_quad_row(self):
         """
         """
@@ -1194,7 +1166,6 @@ class Test_check_hidden_subsets(unittest.TestCase):
             [(3,9),(0,9),(1,10), "cells to the bottom unaffected"],
         ]
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
-
 
 
     def test_check_hidden_quad_block(self):
@@ -1271,6 +1242,7 @@ class Test_check_wings(unittest.TestCase):
     def setUp(self):
         self.verbose = 1
 
+
     def test_check_wing_double_col(self):
         """
         """
@@ -1290,6 +1262,7 @@ class Test_check_wings(unittest.TestCase):
 #         self.assertTrue(numpy.all(s[5,2,(1,3)] == 0))
 #         self.assertTrue(numpy.all(s[7:9,2,(1,3)] == 0))
 #         self.assertTrue(numpy.all(s[0:9,3:,(1,3)] != 0))
+
 
 
     def test_check_wing_triple_col(self):
@@ -1316,6 +1289,295 @@ class Test_check_wings(unittest.TestCase):
 
 
 
+
+class Test_check_locked_sets(unittest.TestCase):
+
+    def setUp(self):
+        self.verbose = 1
+
+
+    def do_tests(self, s, test_filled, test_no_pencil, tests_pencils):
+        for test in test_filled:
+            r,c,n = make_range(test)
+            for _r in r:
+                for _c in c:
+                    for _n in n:
+                        with self.subTest(test[3]):
+                            self.assertTrue(numpy.all(s[_r,_c,0] == _n))  
+
+
+        for test in test_no_pencil:
+            r,c,n = make_range(test)
+            for _r in r:
+                for _c in c:
+                    for _n in n:
+                        with self.subTest(test[3]):
+                            self.assertTrue(numpy.all(s[_r,_c,_n] == 0))  
+
+        for test in tests_pencils:
+            r,c,n = make_range(test)
+            for _r in r:
+                for _c in c:
+                    for _n in n:
+                        with self.subTest(test[3]):
+                            self.assertTrue(numpy.all(s[_r,_c,_n] == _n))  
+
+
+    def test_check_locked_set_experiment(self):
+        """
+        """
+        s = SSR.construct_sudoku(verbose = self.verbose)
+        r = 0
+        except_c = [0,1,2]
+        n = [1]
+        s  = SSR.erase_pencil_row(s, r = r, except_c = except_c, n = n, verbose = self.verbose) 
+                
+        except_r = [3,4,5]
+        c = 1
+        n = [2]
+        s  = SSR.erase_pencil_col(s, except_r = except_r, c = c, n = n, verbose = self.verbose) 
+
+        r = 4
+        except_c = [0,1,2,6,7,8]
+        n = [3]
+        s  = SSR.erase_pencil_row(s, r = r, except_c = except_c, n = n, verbose = self.verbose) 
+        r = 5
+        s  = SSR.erase_pencil_row(s, r = r, except_c = except_c, n = n, verbose = self.verbose) 
+
+        except_r = [0,1,2,3,4,5]
+        c = 6
+        n = [5]
+        s  = SSR.erase_pencil_col(s, except_r = except_r, c = c, n = n, verbose = self.verbose) 
+        c = 7
+        s  = SSR.erase_pencil_col(s, except_r = except_r, c = c, n = n, verbose = self.verbose) 
+       
+        s = SSS.check_locked_sets(s, verbose = self.verbose)
+#         SSD.display_pencil(s)
+
+    def test_check_locked_sets_row_pointing(self):
+        """
+        """
+        s = SSR.construct_sudoku(verbose = self.verbose)
+        r = 4
+        except_c = [0,1,2,6,7,8]
+        n = [3]
+        s  = SSR.erase_pencil_row(s, r = r, except_c = except_c, n = n, verbose = self.verbose) 
+        r = 5
+        s  = SSR.erase_pencil_row(s, r = r, except_c = except_c, n = n, verbose = self.verbose) 
+        r = 3
+        c = 5
+        s  = SSR.erase_pencil(s, r = r, c = c, n = n, verbose = self.verbose) 
+        s = SSS.check_locked_sets(s, verbose = self.verbose)
+#         SSD.display_pencil(s)
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [3,(0,3),3, "removed pencil marks in row left"],
+            [3,(6,9),3, "removed pencil marks in row right"],
+        ]
+        tests_pencils = [
+            [3,(3,5),(1,10), "remaining pencil marks at intersection"],
+            [[4,5],(3,6),[1,2,4,5,6,7,8,9], "remaining pencil marks except 3"],
+            [(0,3),(0,9),(1,10), "no change above"],
+            [[4,5],(0,3),(1,10), "no change left"],
+            [[4,5],(6,9),(1,10), "no change right"],
+            [(6,9),(0,9),(1,10), "no change below"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+
+
+    def test_check_locked_sets_col_pointing(self):
+        """
+        """
+        s = SSR.construct_sudoku(verbose = self.verbose)
+        c = 4
+        except_r = [0,1,2,6,7,8]
+        n = [3]
+        s  = SSR.erase_pencil_col(s, except_r = except_r, c = c, n = n, verbose = self.verbose) 
+        c = 5
+        s  = SSR.erase_pencil_col(s, except_r = except_r, c = c, n = n, verbose = self.verbose) 
+        c = 3
+        r = 5
+        s  = SSR.erase_pencil(s, r = r, c = c, n = n, verbose = self.verbose) 
+        s = SSS.check_locked_sets(s, verbose = self.verbose)
+#         SSD.display_pencil(s)
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [(0,3),3,3, "removed pencil marks in col top"],
+            [(6,9),3,3, "removed pencil marks in col bottom"],
+        ]
+        tests_pencils = [
+            [(3,5),3,(1,10), "remaining pencil marks at intersection"],
+            [(3,6),[4,5],[1,2,4,5,6,7,8,9], "remaining pencil marks except 3"],
+            [(0,9),(0,3),(1,10), "no change above"],
+            [(0,3),[4,5],(1,10), "no change left"],
+            [(6,9),[4,5],(1,10), "no change right"],
+            [(0,9),(6,9),(1,10), "no change below"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+
+
+    def test_check_locked_set_triple_row_pointing(self):
+        """
+        """
+        s = SSR.construct_sudoku(verbose = self.verbose)
+        r = 4
+        except_c = [0,1,2,6,7,8]
+        n = [3]
+        s  = SSR.erase_pencil_row(s, r = r, except_c = except_c, n = n, verbose = self.verbose) 
+        r = 5
+        s  = SSR.erase_pencil_row(s, r = r, except_c = except_c, n = n, verbose = self.verbose) 
+        s = SSS.check_locked_sets(s, verbose = self.verbose)
+#         SSD.display_pencil(s)
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [3,(0,3),3, "removed pencil marks"],
+            [3,(6,9),3, "removed pencil marks"],
+        ]
+        tests_pencils = [
+            [3,(3,6),(1,10), "remaining pencil marks"],
+            [[4,5],(3,6),[1,2,4,5,6,7,8,9], "remaining pencil marks"],
+            [(0,3),(0,9),(1,10), "no change above"],
+            [[4,5],(0,3),(1,10), "no change left"],
+            [[4,5],(6,9),(1,10), "no change right"],
+            [(6,9),(0,9),(1,10), "no change below"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+
+
+    def test_check_locked_set_triple_col_pointing(self):
+        """
+        """
+        s = SSR.construct_sudoku(verbose = self.verbose)
+        c = 4
+        except_r = [0,1,2,6,7,8]
+        n = [3]
+        s  = SSR.erase_pencil_col(s, except_r = except_r, c = c, n = n, verbose = self.verbose) 
+        c = 5
+        s  = SSR.erase_pencil_col(s, except_r = except_r, c = c, n = n, verbose = self.verbose) 
+        s = SSS.check_locked_sets(s, verbose = self.verbose)
+#         SSD.display_pencil(s)
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [(0,3),3,3, "removed pencil marks"],
+            [(6,9),3,3, "removed pencil marks"],
+        ]
+        tests_pencils = [
+            [(3,6),3,(1,10), "remaining pencil marks"],
+            [(3,6),[4,5],[1,2,4,5,6,7,8,9], "remaining pencil marks"],
+            [(0,9),(0,3),(1,10), "no change above"],
+            [(0,3),[4,5],(1,10), "no change left"],
+            [(6,9),[4,5],(1,10), "no change right"],
+            [(0,9),(6,9),(1,10), "no change below"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+
+
+    def test_check_locked_sets_row_claiming(self):
+        """
+        """
+        s = SSR.construct_sudoku(verbose = self.verbose)
+        r = 0
+        except_c = [0,1,2]
+        n = [1]
+        s  = SSR.erase_pencil_row(s, r = r, except_c = except_c, n = n, verbose = self.verbose) 
+        r = 0
+        c = 1
+        s  = SSR.erase_pencil(s, r = r, c = c, n = n, verbose = self.verbose) 
+        s = SSS.check_locked_sets(s, verbose = self.verbose)
+#         SSD.display_pencil(s)
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [[1,2],(0,3),1, "removed pencil marks"],
+        ]
+        tests_pencils = [
+            [0,[0,2],(1,10), "remaining pencil marks intersection"],
+            [0,1,(2,10), "remaining pencil marks not part of triple"],
+            [[1,2],(0,3),(2,10), "remaining pencil marks rest of block"],
+            [(1,9),(3,9),(1,10), "no change left"],
+            [(3,9),(0,3),(1,10), "no change below"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+
+
+    def test_check_locked_sets_col_claiming(self):
+        """
+        """
+        s = SSR.construct_sudoku(verbose = self.verbose)
+        c = 0
+        except_r = [0,2]
+        n = [1]
+        s  = SSR.erase_pencil_col(s, except_r = except_r, c = c, n = n, verbose = self.verbose) 
+        s = SSS.check_locked_sets(s, verbose = self.verbose)
+#         SSD.display_pencil(s)
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [(0,3),[1,2],1, "removed pencil marks"],
+        ]
+        tests_pencils = [
+            [[0,2],0,(1,10), "remaining pencil marks intersection"],
+            [1,0,(2,10), "remaining pencil marks not part of triple"],
+            [(0,3),[1,2],(2,10), "remaining pencil marks rest of block"],
+            [(3,9),(1,9),(1,10), "no change left"],
+            [(0,3),(3,9),(1,10), "no change below"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+
+
+    def test_check_locked_set_triple_row_claiming(self):
+        """
+        """
+        s = SSR.construct_sudoku(verbose = self.verbose)
+        r = 0
+        except_c = [0,1,2]
+        n = [1]
+        s  = SSR.erase_pencil_row(s, r = r, except_c = except_c, n = n, verbose = self.verbose) 
+        s = SSS.check_locked_sets(s, verbose = self.verbose)
+#         SSD.display_pencil(s)
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [[1,2],(0,3),1, "removed pencil marks"],
+        ]
+        tests_pencils = [
+            [0,(0,3),(1,10), "remaining pencil marks intersection"],
+            [[1,2],(0,3),(2,10), "remaining pencil marks rest of block"],
+            [(1,9),(3,9),(1,10), "no change left"],
+            [(3,9),(0,3),(1,10), "no change below"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+
+
+    def test_check_locked_set_triple_col_claiming(self):
+        """
+        """
+        s = SSR.construct_sudoku(verbose = self.verbose)
+        c = 0
+        except_r = [0,1,2]
+        n = [1]
+        s  = SSR.erase_pencil_col(s, except_r = except_r, c = c, n = n, verbose = self.verbose) 
+        s = SSS.check_locked_sets(s, verbose = self.verbose)
+#         SSD.display_pencil(s)
+        test_filled = [
+        ]
+        test_no_pencil = [
+            [(0,3),[1,2],1, "removed pencil marks"],
+        ]
+        tests_pencils = [
+            [(0,3),0,(1,10), "remaining pencil marks intersection"],
+            [(0,3),[1,2],(2,10), "remaining pencil marks rest of block"],
+            [(3,9),(1,9),(1,10), "no change left"],
+            [(0,3),(3,9),(1,10), "no change below"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
+
+
+
 if __name__ == "__main__": 
 
     verbosity = 0
@@ -1332,11 +1594,13 @@ if __name__ == "__main__":
         suite = unittest.TestLoader().loadTestsFromTestCase( Test_check_hidden_subsets)
         unittest.TextTestRunner(verbosity=verbosity).run(suite)  
         
-    if 1:
+    if 0:
         suite = unittest.TestLoader().loadTestsFromTestCase(Test_check_wings)
         unittest.TextTestRunner(verbosity=verbosity).run(suite)  
         
-        
+    if 1:
+        suite = unittest.TestLoader().loadTestsFromTestCase( Test_check_locked_sets)
+        unittest.TextTestRunner(verbosity=verbosity).run(suite)  
         
         
         

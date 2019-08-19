@@ -1201,5 +1201,146 @@ def check_wing_triple(sudoku, verbose = 0):
 
 
 
+
+
+
+def __check_locked_set_helper(xs,xe,y,ys,ye, verbose = 0):
+
+    if verbose > 1:
+        print("SudokuSolver.solving_routines.__check_locked_set_helper()")
+
+    if xs == 0:
+        xs1 = 3
+        xe1 = 6
+        xs2 = 6
+        xe2 = 9
+    elif xs == 3:
+        xs1 = 0
+        xe1 = 3
+        xs2 = 6
+        xe2 = 9
+    else:
+        xs1 = 0
+        xe1 = 3
+        xs2 = 3
+        xe2 = 6  
+       
+    if y % 3 == 0:
+        y1 = ys + 1
+        y2 = ys + 2
+    elif y % 3 == 1:
+        y1 = ys
+        y2 = ys + 2
+    else:
+        y1 = ys
+        y2 = ys + 1
+
+    return xs1, xe1, xs2, xe2, y1, y2
+
+
+
+def check_locked_sets(sudoku, verbose = 0):
+    """
+    A number can only occur in the intersection of two houses. The pencil marks can be removed from the other house.
+    
+    X : cell which may contain a candidate for digit X
+    - : cell which does not contain a candidate for digit X
+    * : cell from which we may eliminate the candidates for digit X
+    
+    Type 1 (Pointing): 
+    .-------.-------.-------.
+    | * * * | * * * | X X X |
+    |       |       | - - - |
+    |       |       | - - - |
+    '-------'-------'-------'
+
+    Type 2 (Claiming or Box-Line Reduction):
+    .-------.-------.-------.
+    | - - - | - - - | X X X |
+    |       |       | * * * |
+    |       |       | * * * |
+    '-------'-------'-------'
+
+
+    Arguments
+    ---------
+    sudoku : sudoku
+        Standard sudoku
+
+    Returns
+    -------
+    sudoku : sudoku
+        Standard sudoku
+
+
+    Notes
+    -----
+
+
+
+    """ 
+    if verbose > 1:
+        print("SudokuSolver.solving_routines.check_locked_set_double()")
+        
+        
+    rows, cols, nums, blocks = SSR.unfinished_rcnbrbc(sudoku, verbose)
+    
+    
+    for br in range(3):
+        for bc in range(3):
+            rs, re, cs, ce = SSR.find_block_indices_br_bc(br, bc, verbose)
+            for _n in range(len(nums)):
+                n = nums[_n]
+                for r in range(rs,re):
+                    if r in rows:
+                        cs1, ce1, cs2, ce2, r1, r2 = __check_locked_set_helper(cs, ce, r, rs, re, verbose)               
+                        if numpy.all(sudoku[r,cs1:ce1,n] == 0):
+                            if numpy.all(sudoku[r,cs2:ce2,n] == 0):
+                                if numpy.any(sudoku[r,cs:ce,n] == n):
+                                    sudoku[r1,cs:ce,n] = 0
+                                    sudoku[r2,cs:ce,n] = 0
+                            
+                        if numpy.all(sudoku[r1,cs:ce,n] == 0):
+                            if numpy.all(sudoku[r2,cs:ce,n] == 0):
+                                if numpy.any(sudoku[r,cs:ce,n] == n):
+                                    sudoku[r,cs1:ce1,n] = 0
+                                    sudoku[r,cs2:ce2,n] = 0                                    
+                                                        
+                for c in range(cs,ce):
+                    if c in cols:
+                        rs1, re1, rs2, re2, c1, c2 = __check_locked_set_helper(rs, re, c, cs, ce, verbose)                        
+                        if numpy.all(sudoku[rs1:re1,c,n] == 0):
+                            if numpy.all(sudoku[rs2:re2,c,n] == 0):
+                                if numpy.any(sudoku[rs:re,c,n] == n):
+                                    sudoku[rs:re,c1,n] = 0
+                                    sudoku[rs:re,c2,n] = 0
+                            
+                        if numpy.all(sudoku[rs:re,c1,n] == 0):
+                            if numpy.all(sudoku[rs:re,c2,n] == 0):
+                                if numpy.any(sudoku[rs:re,c,n] == n):
+                                    sudoku[rs1:re1,c,n] = 0
+                                    sudoku[rs2:re2,c,n] = 0                 
+    
+    
+    
+    return sudoku    
+    
+    
+    
+    
+    
+    
+        
+
+
+
+
+
+
+
+
+
+
+
 if __name__ == "__main__": 
     pass
