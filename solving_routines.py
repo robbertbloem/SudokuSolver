@@ -1128,80 +1128,6 @@ def check_hidden_quad(sudoku, verbose = 0):
     return sudoku
 
 
-def check_wing_double(sudoku, verbose = 0):
-    """
-    
-
-    Arguments
-    ---------
-    sudoku : sudoku
-        Standard sudoku
-
-    Returns
-    -------
-    sudoku : sudoku
-        Standard sudoku
-
-
-    Notes
-    -----
-
-
-
-    """ 
-    if verbose > 1:
-        print("SudokuSolver.solving_routines.check_wing_double()")    
-
-    rows, cols, nums, blocks = SSR.unfinished_rcnbrbc(sudoku, verbose)
-
-
-    return sudoku
-
-
-
-def check_wing_triple(sudoku, verbose = 0):
-    """
-    
-
-    Arguments
-    ---------
-    sudoku : sudoku
-        Standard sudoku
-
-    Returns
-    -------
-    sudoku : sudoku
-        Standard sudoku
-
-
-    Notes
-    -----
-
-
-
-    """ 
-    if verbose > 1:
-        print("SudokuSolver.solving_routines.check_wing_triple()")    
-
-    rows, cols, nums, blocks = SSR.unfinished_rcnbrbc(sudoku, verbose)
-
-
-
-
-
-
-
-
-
-
-
-
-
-    return sudoku
-
-
-
-
 
 
 def __check_locked_set_helper(xs,xe,y,ys,ye, verbose = 0):
@@ -1331,9 +1257,140 @@ def check_locked_sets(sudoku, verbose = 0):
     
     
         
+def check_xy_wing(sudoku, verbose = 0):
+    """
+    
+
+    Arguments
+    ---------
+    sudoku : sudoku
+        Standard sudoku
+
+    Returns
+    -------
+    sudoku : sudoku
+        Standard sudoku
+
+
+    Notes
+    -----
+    Type 1:box-line
+    XY .  . | . . . | YZ *  *
+    .  .  . | . . . | .  .  .
+    *  *  * | . . . | .  XZ .
+
+
+    """ 
+    if verbose > 1:
+        print("SudokuSolver.solving_routines.check_xy_wing()")  
+
+    rows, cols, nums, blocks = SSR.unfinished_rcnbrbc(sudoku, verbose)
+
+    tests = []
+    for r in rows:  
+        for c in cols:
+            if numpy.count_nonzero(sudoku[r,c,1:10]) == 2:
+                n = numpy.where(sudoku[r,c,1:10] != 0)[0]
+                tests.append([r,c,n[0],n[1]])
+        
+    print(tests)
+    
+    return sudoku
+    
+        
+    
 
 
 
+
+
+
+
+
+
+# def __check_wing_double_helper(sudoku, rows, cols, verbose = 0):
+
+    
+def check_wing_double(sudoku, verbose = 0):
+    """
+    
+
+    Arguments
+    ---------
+    sudoku : sudoku
+        Standard sudoku
+
+    Returns
+    -------
+    sudoku : sudoku
+        Standard sudoku
+
+
+    Notes
+    -----
+
+
+
+    """ 
+    if verbose > 1:
+        print("SudokuSolver.solving_routines.check_wing_double()")    
+
+    rows, cols, nums, blocks = SSR.unfinished_rcnbrbc(sudoku, verbose)
+    
+    
+    for r1 in range(6):
+        if r1 < 3:
+            rs = 3
+        else:
+            rs = 6
+        for r2 in range(rs,9):    
+            if r1 in rows and r2 in rows:        
+                for c1 in range(6):
+                    if c1 < 3:
+                        cs = 3
+                    else:
+                        cs = 6
+                    for c2 in range(cs,9):
+                        if c1 in cols and c2 in cols:
+                            for n in nums:
+                                # col
+                                test = numpy.arange(9)
+#                                 test = numpy.delete(                        
+                            
+
+
+    return sudoku
+
+
+def check_wing_triple(sudoku, verbose = 0):
+    """
+    
+
+    Arguments
+    ---------
+    sudoku : sudoku
+        Standard sudoku
+
+    Returns
+    -------
+    sudoku : sudoku
+        Standard sudoku
+
+
+    Notes
+    -----
+
+
+
+    """ 
+    if verbose > 1:
+        print("SudokuSolver.solving_routines.check_wing_triple()")    
+
+    rows, cols, nums, blocks = SSR.unfinished_rcnbrbc(sudoku, verbose)
+
+
+
+    return sudoku
 
 
 

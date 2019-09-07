@@ -1000,7 +1000,7 @@ class Test_check_hidden_subsets(unittest.TestCase):
             [(0,9),(3,9),(1,10), "cells to the right unaffected"],
         ]
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
-        
+     
 
     def test_check_hidden_triple_row(self):
         """
@@ -1237,13 +1237,40 @@ class Test_check_hidden_subsets(unittest.TestCase):
         self.do_tests(s, test_filled, test_no_pencil, tests_pencils)
 
 
-class Test_check_wings(unittest.TestCase):
+class Test_check_fishes(unittest.TestCase):
 
     def setUp(self):
         self.verbose = 1
 
 
-    def test_check_wing_double_col(self):
+    def do_tests(self, s, test_filled, test_no_pencil, tests_pencils):
+        for test in test_filled:
+            r,c,n = make_range(test)
+            for _r in r:
+                for _c in c:
+                    for _n in n:
+                        with self.subTest(test[3]):
+                            self.assertTrue(numpy.all(s[_r,_c,0] == _n))  
+
+
+        for test in test_no_pencil:
+            r,c,n = make_range(test)
+            for _r in r:
+                for _c in c:
+                    for _n in n:
+                        with self.subTest(test[3]):
+                            self.assertTrue(numpy.all(s[_r,_c,_n] == 0))  
+
+        for test in tests_pencils:
+            r,c,n = make_range(test)
+            for _r in r:
+                for _c in c:
+                    for _n in n:
+                        with self.subTest(test[3]):
+                            self.assertTrue(numpy.all(s[_r,_c,_n] == _n))  
+
+
+    def test_experiment_wing(self):
         """
         """
         s = SSR.construct_sudoku(verbose = self.verbose)
@@ -1251,40 +1278,19 @@ class Test_check_wings(unittest.TestCase):
         c = [2,6]
         n = [4]
         for _c in c:
-            s  = SSR.erase_pencil_col(s, except_r = except_r, c = _c, n = n, verbose = self.verbose) 
+            s  = SSR.erase_pencil_col(s, except_r = except_r, c = _c, n = n, verbose = self.verbose)       
+        except_c = [3,7]
+        r = [1,5]
+        n = [3]
+        for _r in r:
+            s  = SSR.erase_pencil_row(s, r = _r, except_c = except_c, n = n, verbose = self.verbose)   
         
-        
-#         s = SSS.check_wing_double(s, self.verbose)
+        s = SSS.check_wing_double(s, self.verbose)
+              
 #         SSD.display_pencil(s)
-#         self.assertTrue(numpy.all(s[4,2,(1,3)] != 0))
-#         self.assertTrue(numpy.all(s[6,2,(1,3)] != 0))
-#         self.assertTrue(numpy.all(s[0:4,2,(1,3)] == 0))
-#         self.assertTrue(numpy.all(s[5,2,(1,3)] == 0))
-#         self.assertTrue(numpy.all(s[7:9,2,(1,3)] == 0))
-#         self.assertTrue(numpy.all(s[0:9,3:,(1,3)] != 0))
 
 
 
-    def test_check_wing_triple_col(self):
-        """
-        """
-        s = SSR.construct_sudoku(verbose = self.verbose)
-        except_r = [4,6,8]
-        c = [2,4,6]
-        n = [4]
-        for _c in c:
-            s  = SSR.erase_pencil_col(s, except_r = except_r, c = _c, n = n, verbose = self.verbose) 
-        s[4,4,4] = 0
-        
-        
-#         s = SSS.check_wing_double(s, self.verbose)
-#         SSD.display_pencil(s)
-#         self.assertTrue(numpy.all(s[4,2,(1,3)] != 0))
-#         self.assertTrue(numpy.all(s[6,2,(1,3)] != 0))
-#         self.assertTrue(numpy.all(s[0:4,2,(1,3)] == 0))
-#         self.assertTrue(numpy.all(s[5,2,(1,3)] == 0))
-#         self.assertTrue(numpy.all(s[7:9,2,(1,3)] == 0))
-#         self.assertTrue(numpy.all(s[0:9,3:,(1,3)] != 0))
 
 
 
@@ -1578,6 +1584,72 @@ class Test_check_locked_sets(unittest.TestCase):
 
 
 
+
+class Test_check_wings(unittest.TestCase):
+
+    def setUp(self):
+        self.verbose = 1
+
+
+    def do_tests(self, s, test_filled, test_no_pencil, tests_pencils):
+        for test in test_filled:
+            r,c,n = make_range(test)
+            for _r in r:
+                for _c in c:
+                    for _n in n:
+                        with self.subTest(test[3]):
+                            self.assertTrue(numpy.all(s[_r,_c,0] == _n))  
+
+
+        for test in test_no_pencil:
+            r,c,n = make_range(test)
+            for _r in r:
+                for _c in c:
+                    for _n in n:
+                        with self.subTest(test[3]):
+                            self.assertTrue(numpy.all(s[_r,_c,_n] == 0))  
+
+        for test in tests_pencils:
+            r,c,n = make_range(test)
+            for _r in r:
+                for _c in c:
+                    for _n in n:
+                        with self.subTest(test[3]):
+                            self.assertTrue(numpy.all(s[_r,_c,_n] == _n))  
+
+
+    def test_check_xy_wing_box_row(self):
+        """
+        """
+        s = SSR.construct_sudoku(verbose = self.verbose)
+        rcn = [
+            [1,1,[1,2]],
+            [1,7,[2,3]],
+            [2,6,[1,3]],
+        ]
+        for _rcn in rcn:
+            n = numpy.arange(1,10)
+            n = numpy.delete(n,_rcn[2])
+            s  = SSR.erase_pencil(s, r = _rcn[0], c = _rcn[1], n = n, verbose = self.verbose) 
+
+#         s = SSS.check_locked_sets(s, verbose = self.verbose)
+        SSD.display_pencil(s)
+        test_filled = [
+        ]
+        test_no_pencil = [
+#             [(0,3),[1,2],1, "removed pencil marks"],
+        ]
+        tests_pencils = [
+#             [(0,3),0,(1,10), "remaining pencil marks intersection"],
+#             [(0,3),[1,2],(2,10), "remaining pencil marks rest of block"],
+#             [(3,9),(1,9),(1,10), "no change left"],
+#             [(0,3),(3,9),(1,10), "no change below"],
+        ]
+        self.do_tests(s, test_filled, test_no_pencil, tests_pencils)        
+
+
+
+
 if __name__ == "__main__": 
 
     verbosity = 0
@@ -1595,14 +1667,16 @@ if __name__ == "__main__":
         unittest.TextTestRunner(verbosity=verbosity).run(suite)  
         
     if 0:
-        suite = unittest.TestLoader().loadTestsFromTestCase(Test_check_wings)
+        suite = unittest.TestLoader().loadTestsFromTestCase(Test_check_fishes)
         unittest.TextTestRunner(verbosity=verbosity).run(suite)  
         
     if 1:
         suite = unittest.TestLoader().loadTestsFromTestCase( Test_check_locked_sets)
         unittest.TextTestRunner(verbosity=verbosity).run(suite)  
         
-        
+    if 1:
+        suite = unittest.TestLoader().loadTestsFromTestCase(Test_check_wings)
+        unittest.TextTestRunner(verbosity=verbosity).run(suite)  
         
         
         
